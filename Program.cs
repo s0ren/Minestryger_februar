@@ -78,16 +78,17 @@ for (int i = 0; i < h; i++)
 int antalMiner = 10;
 
 //for  (int i = 0; i < antalMiner; i++)
+string[,] mineKort = new string[h, b];
 int k = 0;
-while(k < antalMiner)
+while (k < antalMiner)
 {
     Random r = new Random();
-    int x = r.Next(1,b-1);
-    int y = r.Next(1,h-1);
+    int x = r.Next(1, b - 1);
+    int y = r.Next(1, h - 1);
 
-    if (plade[y,x] != "M")
+    if (mineKort[y, x] != "M")
     {
-        plade[y,x] = "M";
+        mineKort[y, x] = "M";
         k++;
     }
 }
@@ -100,4 +101,87 @@ for (int i = 1; i < h - 1; i++)
         Console.Write(plade[i, j] + " ");
     }
     Console.WriteLine();
+}
+
+// minekort
+/*
+for (int i = 1; i < h - 1; i++)
+{
+    for (int j = 1; j < b - 1; j++)
+    {
+        Console.Write(mineKort[i, j] + " ");
+    }
+    Console.WriteLine();
+}
+*/
+
+// cursor
+
+// set cursor øverst i venstre hjørne
+Console.SetCursorPosition(0, 0);
+
+// marker hvor "cursor"
+while (true)
+{
+    int left = Console.GetCursorPosition().Left;
+    int top = Console.GetCursorPosition().Top;
+
+    // opfange pile taster
+
+    switch (Console.ReadKey().Key)
+    {
+        case ConsoleKey.LeftArrow:
+            if (Console.GetCursorPosition().Left != 0)
+            {
+                Console.SetCursorPosition(left - 2, top);
+            }
+            break;
+        case ConsoleKey.RightArrow:
+            if (Console.GetCursorPosition().Left < 38)
+            {
+                Console.SetCursorPosition(left + 2, top);
+            }
+            break;
+        case ConsoleKey.UpArrow:
+            if (Console.GetCursorPosition().Top != 0)
+            {
+                Console.SetCursorPosition(left, top - 1);
+            }
+            break;
+        case ConsoleKey.DownArrow:
+            if (Console.GetCursorPosition().Top < 9)
+            {
+                Console.SetCursorPosition(left, top + 1);
+            }
+            break;
+        // TODO ved sæt_flag og ryd_felt skal mellemrum fraregnes inden man indexerer ind på pladen
+
+        // set flag med SHIFT tast
+        case ConsoleKey.Enter:
+            if (top >= 0 && top <= 9 && left >= 0 && left <= 39)
+            {
+                if (mineKort[top + 1, (left / 2) + 1] == "M")
+                {
+                    // TODO Havd skal der ske når der ER en mine?
+                }
+                else
+                {
+                    Console.SetCursorPosition(left, top);
+                    Console.Write(" ");
+                    Console.SetCursorPosition(left, top);
+                }
+            }
+            break;
+
+        // Ryd (clear) felt med CTRL
+
+        default:
+            if (top >= 0 && top <= 9 && left >= 0 && left <= 39)
+            {
+                Console.SetCursorPosition(left, top);
+                Console.Write(plade[top + 1, (left / 2) + 1] + " ");
+                Console.SetCursorPosition(left, top);
+            }
+            break;
+    }
 }
