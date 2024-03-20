@@ -120,8 +120,9 @@ for (int i = 1; i < h - 1; i++)
 // set cursor øverst i venstre hjørne
 Console.SetCursorPosition(0, 0);
 
+bool isGameOver = false;
 // marker hvor "cursor"
-while (true)
+while (!isGameOver)
 {
     int left = Console.GetCursorPosition().Left;
     int top = Console.GetCursorPosition().Top;
@@ -160,18 +161,33 @@ while (true)
         case ConsoleKey.Enter:
             if (top >= 0 && top <= 9 && left >= 0 && left <= 39)
             {
-                if (mineKort[top + 1, (left / 2) + 1] == "M")
+                if (mineKort[top + 1, (left / 2) + 1] == "M")  // check om der en mine
                 {
                     // TODO Havd skal der ske når der ER en mine?
+                    Console.SetCursorPosition(left, top);
+                    Console.Write("*");
+                    Console.SetCursorPosition(left, top);
+                    isGameOver = true;
                 }
                 else
                 {
                     Console.SetCursorPosition(left, top);
                     Console.Write(" ");
                     Console.SetCursorPosition(left, top);
+                    plade[top + 1,(left / 2) + 1] = " ";
                 }
             }
             break;
+        case ConsoleKey.Spacebar:
+            if (top >= 0 && top <= 9 && left >= 0 && left <= 39)
+                if (plade[top +1, (left / 2) + 1] == "U")
+                {
+                    Console.SetCursorPosition(left , top);
+                    Console.Write("F");
+                    Console.SetCursorPosition(left , top);
+                }
+            break;
+
 
         // Ryd (clear) felt med CTRL
 
@@ -185,3 +201,6 @@ while (true)
             break;
     }
 }
+
+Console.SetCursorPosition(0, h + 2);
+Console.WriteLine("Spillet er slut");
