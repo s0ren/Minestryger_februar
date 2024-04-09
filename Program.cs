@@ -138,7 +138,7 @@ while (!isGameOver)
             }
             break;
         case ConsoleKey.RightArrow:
-            if (Console.GetCursorPosition().Left < 38)
+            if (Console.GetCursorPosition().Left < (b * 2) - 2)
             {
                 Console.SetCursorPosition(left + 2, top);
             }
@@ -150,7 +150,7 @@ while (!isGameOver)
             }
             break;
         case ConsoleKey.DownArrow:
-            if (Console.GetCursorPosition().Top < 9)
+            if (Console.GetCursorPosition().Top < h - 1)
             {
                 Console.SetCursorPosition(left, top + 1);
             }
@@ -159,7 +159,7 @@ while (!isGameOver)
 
         // set flag med SHIFT tast
         case ConsoleKey.Enter:
-            if (top >= 0 && top <= 9 && left >= 0 && left <= 39)
+            if (top >= 0 && top <= h - 1 && left >= 0 && left <= (b * 2) - 2)
             {
                 if (mineKort[top + 1, (left / 2) + 1] == "M")  // check om der en mine
                 {
@@ -179,7 +179,7 @@ while (!isGameOver)
             }
             break;
         case ConsoleKey.Spacebar:
-            if (top >= 0 && top <= 9 && left >= 0 && left <= 39)
+            if (top >= 0 && top <= h - 1 && left >= 0 && left <= (b * 2) - 2)
                 if (plade[top +1, (left / 2) + 1] == "U")
                 {
                     Console.SetCursorPosition(left , top);
@@ -192,7 +192,7 @@ while (!isGameOver)
         // Ryd (clear) felt med CTRL
 
         default:
-            if (top >= 0 && top <= 9 && left >= 0 && left <= 39)
+            if (top >= 0 && top <= h - 1 && left >= 0 && left <= (b * 2) - 2)
             {
                 Console.SetCursorPosition(left, top);
                 Console.Write(plade[top + 1, (left / 2) + 1] + " ");
