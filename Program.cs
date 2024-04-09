@@ -115,6 +115,60 @@ for (int i = 1; i < h - 1; i++)
 }
 */
 
+int findAntalNaboMiner(int x, int y)
+{
+    int miner = 0;
+
+    //           y,   x
+    if (mineKort[y - 1, x - 1] == "M")
+    {
+        miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y - 1, x ] == "M")
+    {
+        miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y - 1, x + 1] == "M")
+    {
+        miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y , x - 1] == "M")
+    {
+        miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y, x + 1] == "M")
+    {
+        miner += 1;
+    }
+    
+    //           y,   x
+    if (mineKort[y + 1, x - 1] == "M")
+    {
+        miner += 1;
+    } 
+    
+    //           y,   x
+    if (mineKort[y + 1, x ] == "M")
+    {
+        miner += 1;
+    }
+    
+    //           y,   x
+    if (mineKort[y + 1, x + 1] == "M")
+    {
+        miner += 1;
+    }
+    return miner;
+}
+
 // cursor
 
 // set cursor øverst i venstre hjørne
@@ -171,8 +225,9 @@ while (!isGameOver)
                 }
                 else
                 {
+                    int antalNaboMiner = findAntalNaboMiner((left / 2) + 1, top + 1);
                     Console.SetCursorPosition(left, top);
-                    Console.Write(" ");
+                    Console.Write(antalNaboMiner);
                     Console.SetCursorPosition(left, top);
                     plade[top + 1,(left / 2) + 1] = " ";
                 }
