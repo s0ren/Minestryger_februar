@@ -52,9 +52,9 @@ int h = 10 + 2;
 
 string[,] plade = new string[h, b];
 
-for (int i = 0; i < h; i++)
+for (int i = 1; i < h-1; i++)
 {
-    for (int j = 0; j < b; j++)
+    for (int j = 1; j < b-1; j++)
     {
         //plade[i, j] = Convert.ToString(i + j);
         plade[i, j] = "U";
@@ -115,6 +115,26 @@ for (int i = 1; i < h - 1; i++)
 }
 */
 
+int x2left(int x)
+{ 
+    return (x-1) * 2; 
+}
+
+int left2x(int left) 
+{ 
+    return left / 2 + 1;
+}
+
+int y2top(int y)
+{
+    return y - 1;
+}
+
+int top2y(int top)
+{
+    return top + 1;
+}
+
 int findAntalNaboMiner(int x, int y)
 {
     int miner = 0;
@@ -169,6 +189,69 @@ int findAntalNaboMiner(int x, int y)
     return miner;
 }
 
+void visAntalNaboMiner(int x, int y)
+{
+    int left = x2left(x);
+    int top = y2top(y);
+    int antalNaboMiner = findAntalNaboMiner(x, y);
+    Console.SetCursorPosition(left, top);
+    Console.Write(antalNaboMiner);
+    Console.SetCursorPosition(left, top);
+    plade[y, x] = " ";
+}
+
+void rydNaboFelter(int x, int y)
+{
+    //           y,   x
+    if (plade[y - 1, x - 1] == "U" && mineKort[y - 1, x - 1] != "M")
+    {
+        visAntalNaboMiner(x-1, y-1);
+        rydNaboFelter(x-1, y-1);
+    }
+
+    //           y,   x
+    if (mineKort[y - 1, x] == "M")
+    {
+        //miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y - 1, x + 1] == "M")
+    {
+        //miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y, x - 1] == "M")
+    {
+        //miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y, x + 1] == "M")
+    {
+        //miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y + 1, x - 1] == "M")
+    {
+        //miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y + 1, x] == "M")
+    {
+        //miner += 1;
+    }
+
+    //           y,   x
+    if (mineKort[y + 1, x + 1] == "M")
+    {
+        //miner += 1;
+    }
+}
+
 // cursor
 
 // set cursor øverst i venstre hjørne
@@ -220,16 +303,21 @@ while (!isGameOver)
                     // TODO Havd skal der ske når der ER en mine?
                     Console.SetCursorPosition(left, top);
                     Console.Write("*");
-                    Console.SetCursorPosition(left, top);
+                    Console.SetCursorPosition(left-1, top);
                     isGameOver = true;
                 }
                 else
                 {
-                    int antalNaboMiner = findAntalNaboMiner((left / 2) + 1, top + 1);
-                    Console.SetCursorPosition(left, top);
-                    Console.Write(antalNaboMiner);
-                    Console.SetCursorPosition(left, top);
-                    plade[top + 1,(left / 2) + 1] = " ";
+                    //int antalNaboMiner = findAntalNaboMiner((left / 2) + 1, top + 1);
+                    //Console.SetCursorPosition(left, top);
+                    //Console.Write(antalNaboMiner);
+                    //Console.SetCursorPosition(left, top);
+                    //plade[top + 1,(left / 2) + 1] = " ";
+
+                    int x = left2x(left);
+                    int y = top2y(top);
+                    visAntalNaboMiner(x, y);
+                    rydNaboFelter(x, y);
                 }
             }
             break;
