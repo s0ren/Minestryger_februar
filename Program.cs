@@ -47,7 +47,7 @@ for (int i = 0; i < tabel.GetLength(0); i++)
 
 */
 
-int b = 20 + 2;
+int b = 22 + 2;
 int h = 10 + 2;
 
 string[,] plade = new string[h, b];
@@ -75,7 +75,7 @@ for (int i = 0; i < h; i++)
 */
 
 
-int antalMiner = 10;
+int antalMiner = 20;
 
 //for  (int i = 0; i < antalMiner; i++)
 string[,] mineKort = new string[h, b];
@@ -189,66 +189,98 @@ int findAntalNaboMiner(int x, int y)
     return miner;
 }
 
-void visAntalNaboMiner(int x, int y)
+int visAntalNaboMiner(int x, int y)
 {
     int left = x2left(x);
     int top = y2top(y);
     int antalNaboMiner = findAntalNaboMiner(x, y);
     Console.SetCursorPosition(left, top);
-    Console.Write(antalNaboMiner);
+    if (antalNaboMiner == 0)
+    {
+        Console.Write(" ");
+    }
+    else
+    {
+        Console.Write(antalNaboMiner);
+    }
     Console.SetCursorPosition(left, top);
     plade[y, x] = " ";
+    return antalNaboMiner;
 }
 
 void rydNaboFelter(int x, int y)
 {
+
     //           y,   x
     if (plade[y - 1, x - 1] == "U" && mineKort[y - 1, x - 1] != "M")
     {
-        visAntalNaboMiner(x-1, y-1);
-        rydNaboFelter(x-1, y-1);
+        if (visAntalNaboMiner(x - 1, y - 1) == 0)
+        {
+            rydNaboFelter(x - 1, y - 1);
+        }
     }
 
     //           y,   x
-    if (mineKort[y - 1, x] == "M")
+    if (plade[y - 1, x] == "U" && mineKort[y - 1, x] != "M")
     {
-        //miner += 1;
+        if (visAntalNaboMiner(x, y - 1) == 0)
+        {
+            rydNaboFelter(x, y - 1);
+        }
     }
 
     //           y,   x
-    if (mineKort[y - 1, x + 1] == "M")
+    if (plade[y - 1, x + 1] == "U" && mineKort[y - 1, x + 1] != "M")
     {
-        //miner += 1;
+        if (visAntalNaboMiner(x + 1, y - 1) == 0)
+        {
+            rydNaboFelter(x + 1, y - 1);
+        }
     }
 
     //           y,   x
-    if (mineKort[y, x - 1] == "M")
+    if (plade[y, x - 1] == "U" && mineKort[y, x - 1] != "M")
     {
-        //miner += 1;
+        if (visAntalNaboMiner(x - 1, y) == 0)
+        {
+            rydNaboFelter(x - 1, y);
+        }
     }
 
     //           y,   x
-    if (mineKort[y, x + 1] == "M")
+    if (plade[y, x + 1] == "U" && mineKort[y, x + 1] != "M")
     {
-        //miner += 1;
+        if (visAntalNaboMiner(x + 1, y) == 0)
+        {
+            rydNaboFelter(x + 1, y);
+        }
     }
 
     //           y,   x
-    if (mineKort[y + 1, x - 1] == "M")
+    if (plade[y + 1, x - 1] == "U" && mineKort[y + 1, x - 1] != "M")
     {
-        //miner += 1;
+        if (visAntalNaboMiner(x - 1, y + 1) == 0)
+        {
+            rydNaboFelter(x - 1, y + 1);
+        }
     }
 
     //           y,   x
-    if (mineKort[y + 1, x] == "M")
+    if (plade[y + 1, x] == "U" && mineKort[y + 1, x] != "M")
     {
-        //miner += 1;
+        if (visAntalNaboMiner(x, y + 1) == 0)
+        {
+            rydNaboFelter(x, y + 1);
+        }
     }
 
     //           y,   x
-    if (mineKort[y + 1, x + 1] == "M")
+    if (plade[y + 1, x + 1] == "U" && mineKort[y + 1, x + 1] != "M")
     {
-        //miner += 1;
+        if (visAntalNaboMiner(x + 1, y + 1) == 0)
+        {
+            rydNaboFelter(x + 1, y + 1);
+        }
     }
 }
 
@@ -275,7 +307,7 @@ while (!isGameOver)
             }
             break;
         case ConsoleKey.RightArrow:
-            if (Console.GetCursorPosition().Left < (b * 2) - 2)
+            if (Console.GetCursorPosition().Left < (b * 2) - 5)
             {
                 Console.SetCursorPosition(left + 2, top);
             }
@@ -287,7 +319,7 @@ while (!isGameOver)
             }
             break;
         case ConsoleKey.DownArrow:
-            if (Console.GetCursorPosition().Top < h - 1)
+            if (Console.GetCursorPosition().Top < h - 3)
             {
                 Console.SetCursorPosition(left, top + 1);
             }
@@ -296,7 +328,7 @@ while (!isGameOver)
 
         // set flag med SHIFT tast
         case ConsoleKey.Enter:
-            if (top >= 0 && top <= h - 1 && left >= 0 && left <= (b * 2) - 2)
+            if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 5)
             {
                 if (mineKort[top + 1, (left / 2) + 1] == "M")  // check om der en mine
                 {
@@ -316,13 +348,16 @@ while (!isGameOver)
 
                     int x = left2x(left);
                     int y = top2y(top);
-                    visAntalNaboMiner(x, y);
-                    rydNaboFelter(x, y);
+                    if (visAntalNaboMiner(x, y) == 0)
+                    {
+                        rydNaboFelter(x, y);
+                    }
+                    Console.SetCursorPosition(left, top);
                 }
             }
             break;
         case ConsoleKey.Spacebar:
-            if (top >= 0 && top <= h - 1 && left >= 0 && left <= (b * 2) - 2)
+            if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 5)
                 if (plade[top +1, (left / 2) + 1] == "U")
                 {
                     Console.SetCursorPosition(left , top);
@@ -335,7 +370,7 @@ while (!isGameOver)
         // Ryd (clear) felt med CTRL
 
         default:
-            if (top >= 0 && top <= h - 1 && left >= 0 && left <= (b * 2) - 2)
+            if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 5)
             {
                 Console.SetCursorPosition(left, top);
                 Console.Write(plade[top + 1, (left / 2) + 1] + " ");
