@@ -115,6 +115,28 @@ for (int i = 1; i < h - 1; i++)
 }
 */
 
+void update_status()
+{
+    //throw new NotImplementedException();
+    int antalFlag = 0;
+    int antalUkendte = 0;
+    int antalFelter = (b - 2) * (h - 2);
+    foreach (string felt in plade)
+    {
+        if (felt == "F")
+        {
+            antalFlag += 1;
+        }
+        if (felt == "U" || felt == "F") {
+            antalUkendte += 1;
+        }
+    }
+    Console.SetCursorPosition(0, h);
+    Console.WriteLine($"Flag: {antalFlag:D2} Miner: {antalMiner:D2}");
+    Console.WriteLine($"antalFelter: {antalFelter}, antalUkendte: {antalUkendte}, antalRydede: {antalFelter - antalUkendte}");
+    Console.WriteLine($"Procent ryddet: { (Convert.ToDouble(antalFelter-antalUkendte)/antalFelter):D2}");
+
+}
 int x2left(int x)
 { 
     return (x-1) * 2; 
@@ -360,9 +382,21 @@ while (!isGameOver)
             if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 5)
                 if (plade[top +1, (left / 2) + 1] == "U")
                 {
+                    plade[top + 1, (left / 2) + 1] = "F";
+                    update_status();
+
                     Console.SetCursorPosition(left , top);
                     Console.Write("F");
                     Console.SetCursorPosition(left , top);
+                }
+                else if (plade[top + 1, (left / 2) + 1] == "F")
+                {
+                    plade[top + 1, (left / 2) + 1] = "U";
+                    update_status();
+
+                    Console.SetCursorPosition(left, top);
+                    Console.Write("U");
+                    Console.SetCursorPosition(left, top);
                 }
             break;
 
@@ -379,6 +413,8 @@ while (!isGameOver)
             break;
     }
 }
+
+
 
 Console.SetCursorPosition(0, h + 2);
 Console.WriteLine("Spillet er slut");
