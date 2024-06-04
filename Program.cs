@@ -117,9 +117,31 @@ for (int i = 1; i < h - 1; i++)
 }
 */
 
+void update_status()
+{
+    //throw new NotImplementedException();
+    int antalFlag = 0;
+    int antalUkendte = 0;
+    int antalFelter = (b - 2) * (h - 2);
+    foreach (string felt in plade)
+    {
+        if (felt == "F")
+        {
+            antalFlag += 1;
+        }
+        if (felt == "U" || felt == "F") 
+        {
+            antalUkendte += 1;
+        }
+    }
+    Console.SetCursorPosition(0, h);
+    Console.WriteLine($"Flag: {antalFlag:D2} Miner: {antalMiner:D2}");
+    Console.WriteLine($"antalFelter: {antalFelter}, antalUkendte: {antalUkendte}, antalRydede: {antalFelter - antalUkendte}");
+    Console.WriteLine($"Procent ryddet:{(antalFelter - antalUkendte) / Convert.ToDouble(antalFelter) * 100.0:F2}%");
+}
 int x2left(int x)
-{ 
-    return (x-1) * 2; 
+{
+    return (x - 1) * 2;
 }
 
 int left2x(int left) 
@@ -309,7 +331,7 @@ while (!isGameOver)
             }
             break;
         case ConsoleKey.RightArrow:
-            if (Console.GetCursorPosition().Left < (b * 2) - 5)
+            if (Console.GetCursorPosition().Left < (b * 2) - 6)
             {
                 Console.SetCursorPosition(left + 2, top);
             }
@@ -330,7 +352,7 @@ while (!isGameOver)
 
         // set flag med SHIFT tast
         case ConsoleKey.Enter:
-            if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 5)
+            if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 6)
             {
                 if (mineKort[top + 1, (left / 2) + 1] == "M")  // check om der en mine
                 {
@@ -354,17 +376,30 @@ while (!isGameOver)
                     {
                         rydNaboFelter(x, y);
                     }
+                    update_status();
                     Console.SetCursorPosition(left, top);
                 }
             }
             break;
         case ConsoleKey.Spacebar:
-            if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 5)
+            if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 6)
                 if (plade[top +1, (left / 2) + 1] == "U")
                 {
+                    plade[top + 1, (left / 2) + 1] = "F";
+                    update_status();
+
                     Console.SetCursorPosition(left , top);
                     Console.Write("F");
                     Console.SetCursorPosition(left , top);
+                }
+                else if (plade[top + 1, (left / 2) + 1] == "F")
+                {
+                    plade[top + 1, (left / 2) + 1] = "U";
+                    update_status();
+
+                    Console.SetCursorPosition(left, top);
+                    Console.Write("U");
+                    Console.SetCursorPosition(left, top);
                 }
             break;
 
@@ -372,7 +407,7 @@ while (!isGameOver)
         // Ryd (clear) felt med CTRL
 
         default:
-            if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 5)
+            if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 6)
             {
                 Console.SetCursorPosition(left, top);
                 Console.Write(plade[top + 1, (left / 2) + 1] + " ");
@@ -381,6 +416,8 @@ while (!isGameOver)
             break;
     }
 }
+
+
 
 Console.SetCursorPosition(0, h + 2);
 Console.WriteLine("Spillet er slut");
