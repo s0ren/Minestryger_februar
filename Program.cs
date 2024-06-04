@@ -47,6 +47,8 @@ for (int i = 0; i < tabel.GetLength(0); i++)
 
 */
 
+Console.Clear();
+
 int b = 22 + 2;
 int h = 10 + 2;
 
