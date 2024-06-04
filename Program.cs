@@ -115,6 +115,8 @@ for (int i = 1; i < h - 1; i++)
 }
 */
 
+bool isGameOver = false;
+double Procentryddet = 0;
 void update_status()
 {
     //throw new NotImplementedException();
@@ -127,15 +129,21 @@ void update_status()
         {
             antalFlag += 1;
         }
-        if (felt == "U" || felt == "F") 
+        //if (felt == "U" || felt == "F") 
+        if (felt == "U")
         {
             antalUkendte += 1;
         }
     }
+    Procentryddet = (antalFelter - antalUkendte) / Convert.ToDouble(antalFelter) * 100.0;
     Console.SetCursorPosition(0, h);
     Console.WriteLine($"Flag: {antalFlag:D2} Miner: {antalMiner:D2}");
-    Console.WriteLine($"antalFelter: {antalFelter}, antalUkendte: {antalUkendte}, antalRydede: {antalFelter - antalUkendte}");
-    Console.WriteLine($"Procent ryddet:{(antalFelter - antalUkendte) / Convert.ToDouble(antalFelter) * 100.0:F2}%");
+    Console.WriteLine($"antalFelter: {antalFelter}, antalUkendte: {antalUkendte:D3}, antalRydede: {antalFelter - antalUkendte:D3}");
+    Console.WriteLine($"Procent ryddet:{Procentryddet:F2}%");
+    if(Procentryddet == 100)
+    {
+        isGameOver = true;
+    }
 }
 int x2left(int x)
 {
@@ -311,7 +319,7 @@ void rydNaboFelter(int x, int y)
 // set cursor øverst i venstre hjørne
 Console.SetCursorPosition(0, 0);
 
-bool isGameOver = false;
+
 // marker hvor "cursor"
 while (!isGameOver)
 {
@@ -415,7 +423,20 @@ while (!isGameOver)
     }
 }
 
+ConsoleColor oldBackColor = Console.BackgroundColor;
+if (Procentryddet == 100)
+{
+    Console.SetCursorPosition(0, h + 4);
+    Console.WriteLine("VINNER!!!"); 
+    for (int i = 1; i < h - 1; i++)
+    {
+        for (int j = 1; j < b - 1; j++)
+        {
+            if()
+            Console.BackgroundColor = ConsoleColor.Green;
 
-
-Console.SetCursorPosition(0, h + 2);
-Console.WriteLine("Spillet er slut");
+            Console.BackgroundColor = oldBackColor;
+        }
+    }
+    
+}
