@@ -77,7 +77,7 @@ for (int i = 0; i < h; i++)
 */
 
 
-int antalMiner = 20;
+int antalMiner = 1;
 
 //for  (int i = 0; i < antalMiner; i++)
 string[,] mineKort = new string[h, b];
@@ -119,12 +119,15 @@ for (int i = 1; i < h - 1; i++)
 
 bool isGameOver = false;
 double Procentryddet = 0;
+int antalFlag = 0;
+int antalUkendte = 0;
+int antalFelter = 0;
 void update_status()
 {
     //throw new NotImplementedException();
-    int antalFlag = 0;
-    int antalUkendte = 0;
-    int antalFelter = (b - 2) * (h - 2);
+    antalFlag = 0;
+    antalUkendte = 0;
+    antalFelter = (b - 2) * (h - 2);
     foreach (string felt in plade)
     {
         if (felt == "F")
@@ -424,21 +427,41 @@ while (!isGameOver)
             break;
     }
 }
-
+if()
 ConsoleColor oldBackColor = Console.BackgroundColor;
-if (Procentryddet == 100)
+bool vinner = false;
+if (Procentryddet == 100 && antalMiner == antalFlag)
 {
     Console.SetCursorPosition(0, h + 4);
     Console.WriteLine("VINNER!!!"); 
-    for (int i = 1; i < h - 1; i++)
+    vinner = true;
+}
+for (int i = 1; i < h - 1; i++)
+{
+    for (int j = 1; j < b - 1; j++)
     {
-        for (int j = 1; j < b - 1; j++)
+        int left = x2left(j);
+        int top = y2top(i);
+        if (mineKort[i, j] == "M" && plade[i, j] == "F")
         {
-            if()
             Console.BackgroundColor = ConsoleColor.Green;
-
+            Console.SetCursorPosition(left, top);
+            Console.Write("*");
+            Console.BackgroundColor = oldBackColor;
+        }
+        else if (!vinner && plade[i, j] == "F" && mineKort[i, j] != "M")
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(left, top);
+            Console.Write("F");
+            Console.BackgroundColor = oldBackColor;
+        }
+        else if (!vinner && mineKort[i, j] == "M" && plade[i, j] != "F")
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(left, top);
+            Console.Write("*");
             Console.BackgroundColor = oldBackColor;
         }
     }
-    
 }
