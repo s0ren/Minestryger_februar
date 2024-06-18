@@ -1,85 +1,19 @@
-﻿/*
-
-// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
-
-int[] point = new int[10];
-
-int[] point2 = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
-
-int[,] tabel = new int[3, 4];
-
-int[,,] tabel3 = new int[2, 3, 4];
-
-int[,,,] tabel4 = new int[2, 3, 4, 5];
-
-Console.WriteLine(point2[4]);
-Console.WriteLine(point[4]);
-
-String[] række = new String[2];
-
-Console.WriteLine(række[1]);
-
-for (int i = 0; i < række.Length; i++)
-{
-    række[i] = Convert.ToString(i);
-}
-Console.WriteLine(række);
-foreach (string s in række)
-{
-    Console.WriteLine(s);
-}
-
-for (int i = 0; i < tabel.GetLength(0); i++)
-    for (int j = 0; j < tabel.GetLength(1); j++)
-    {
-        tabel[i, j] = i + j;
-    }
-
-for (int i = 0; i < tabel.GetLength(0); i++)
-{ 
-    for (int j = 0; j < tabel.GetLength(1); j++)
-    {
-        Console.Write(tabel[i,j] + "\t");
-    }
-    Console.WriteLine();
-}
-
-*/
-
-Console.Clear();
-
+﻿
 int b = 22 + 2;
 int h = 10 + 2;
 
 string[,] plade = new string[h, b];
 
-for (int i = 1; i < h-1; i++)
+for (int i = 1; i < h - 1; i++)
 {
-    for (int j = 1; j < b-1; j++)
+    for (int j = 1; j < b - 1; j++)
     {
-        //plade[i, j] = Convert.ToString(i + j);
         plade[i, j] = "U";
     }
 }
 
-// plade[5, 9] = "M";
+int antalMiner = 20;
 
-/*
-for (int i = 0; i < h; i++)
-{
-    for (int j = 0; j < b; j++)
-    {
-        Console.Write(plade[i, j] + "\t");
-    }
-    Console.WriteLine();
-}
-*/
-
-
-int antalMiner = 1;
-
-//for  (int i = 0; i < antalMiner; i++)
 string[,] mineKort = new string[h, b];
 int k = 0;
 while (k < antalMiner)
@@ -95,31 +29,25 @@ while (k < antalMiner)
     }
 }
 
-ConsoleColor oldBackColor = Console.BackgroundColor;
 Console.BackgroundColor = ConsoleColor.DarkGray;
+ConsoleColor oldBackColor = Console.BackgroundColor;
+
 for (int i = 1; i < h - 1; i++)
 {
     for (int j = 1; j < b - 1; j++)
     {
         
-        Console.Write(plade[i, j] + " ");
+        Console.Write(plade[i, j]);
+        if(j < b - 2)
+        {
+            Console.Write(' ');
+        }
     }
     Console.WriteLine();
 }
-Console.BackgroundColor = oldBackColor;
 
-// minekort
-/*
-for (int i = 1; i < h - 1; i++)
-{
-    for (int j = 1; j < b - 1; j++)
-    {
-        Console.Write(mineKort[i, j] + " ");
-    }
-    Console.WriteLine();
-}
-*/
-
+int left = 0;
+int top = 0;
 bool isGameOver = false;
 bool vinner = false;
 bool taber = false;
@@ -127,12 +55,14 @@ double Procentryddet = 0;
 int antalFlag = 0;
 int antalUkendte = 0;
 int antalFelter = 0;
+
 void update_status()
 {
     //throw new NotImplementedException();
     antalFlag = 0;
     antalUkendte = 0;
     antalFelter = (b - 2) * (h - 2);
+
     foreach (string felt in plade)
     {
         if (felt == "F")
@@ -145,12 +75,18 @@ void update_status()
             antalUkendte += 1;
         }
     }
+
     Procentryddet = (antalFelter - antalUkendte) / Convert.ToDouble(antalFelter) * 100.0;
+
+    Console.BackgroundColor = ConsoleColor.Black;
     Console.SetCursorPosition(0, h);
     Console.WriteLine($"Flag: {antalFlag:D2} Miner: {antalMiner:D2}");
     Console.WriteLine($"antalFelter: {antalFelter}, antalUkendte: {antalUkendte:D3}, antalRydede: {antalFelter - antalUkendte:D3}");
     Console.WriteLine($"Procent ryddet:{Procentryddet:F2}%");
-    if(!taber && Procentryddet == 100 && antalFlag == antalMiner)
+    Console.BackgroundColor = oldBackColor; 
+    Console.SetCursorPosition(left, top);
+
+    if (!taber && Procentryddet == 100 && antalFlag == antalMiner)
     {
         isGameOver = true;
         vinner = true;
@@ -240,7 +176,6 @@ int visAntalNaboMiner(int x, int y)
     int top = y2top(y);
     int antalNaboMiner = findAntalNaboMiner(x, y);
     Console.SetCursorPosition(left, top);
-    Console.BackgroundColor = ConsoleColor.DarkGray;
     if (antalNaboMiner == 0)
     {
         Console.Write(" ");
@@ -249,7 +184,6 @@ int visAntalNaboMiner(int x, int y)
     {
         Console.Write(antalNaboMiner);
     }
-    Console.BackgroundColor = oldBackColor;
     Console.SetCursorPosition(left, top);
     plade[y, x] = " ";
     return antalNaboMiner;
@@ -339,12 +273,11 @@ update_status();
 
 Console.SetCursorPosition(0, 0);
 
-
 // marker hvor "cursor"
 while (!isGameOver)
 {
-    int left = Console.GetCursorPosition().Left;
-    int top = Console.GetCursorPosition().Top;
+    left = Console.GetCursorPosition().Left;
+    top = Console.GetCursorPosition().Top;
 
     // opfange pile taster
 
@@ -386,19 +319,9 @@ while (!isGameOver)
                     taber = true;
                     plade[top + 1, (left / 2) + 1] = "*";
                     update_status();
-
-                    Console.SetCursorPosition(left, top);
-                    Console.Write("*");
-                    Console.SetCursorPosition(left, top);
                 }
                 else
                 {
-                    //int antalNaboMiner = findAntalNaboMiner((left / 2) + 1, top + 1);
-                    //Console.SetCursorPosition(left, top);
-                    //Console.Write(antalNaboMiner);
-                    //Console.SetCursorPosition(left, top);
-                    //plade[top + 1,(left / 2) + 1] = " ";
-
                     int x = left2x(left);
                     int y = top2y(top);
                     if (visAntalNaboMiner(x, y) == 0)
@@ -406,33 +329,27 @@ while (!isGameOver)
                         rydNaboFelter(x, y);
                     }
                     update_status();
-                    Console.SetCursorPosition(left, top);
                 }
             }
             break;
         case ConsoleKey.Spacebar:
+            Console.SetCursorPosition(left, top);
             if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 6)
                 if (plade[top +1, (left / 2) + 1] != "F")
                 {
                     plade[top + 1, (left / 2) + 1] = "F";
-                    update_status();
 
-                    Console.BackgroundColor = ConsoleColor.DarkGray;
-                    Console.SetCursorPosition(left , top);
                     Console.Write("F");
-                    Console.SetCursorPosition(left , top);
-                    Console.BackgroundColor = oldBackColor;
+
+                    update_status();
                 }
                 else if (plade[top + 1, (left / 2) + 1] == "F")
                 {
                     plade[top + 1, (left / 2) + 1] = "U";
-                    update_status();
-
-                    Console.BackgroundColor = ConsoleColor.DarkGray;
-                    Console.SetCursorPosition(left, top);
+                    
                     Console.Write("U");
-                    Console.SetCursorPosition(left, top);
-                    Console.BackgroundColor = oldBackColor;
+
+                    update_status();
                 }
             break;
 
@@ -443,14 +360,16 @@ while (!isGameOver)
             if (top >= 0 && top <= h - 3 && left >= 0 && left <= (b * 2) - 6)
             {
                 Console.SetCursorPosition(left, top);
-                Console.Write(plade[top + 1, (left / 2) + 1] + " ");
+                Console.Write(plade[top + 1, (left / 2) + 1]);
                 Console.SetCursorPosition(left, top);
             }
             break;
     }
 }
 if (isGameOver)
-{ 
+{
+    Console.BackgroundColor = ConsoleColor.Black;
+
     if (vinner)
     {
         Console.SetCursorPosition(0, h + 4);
@@ -461,32 +380,31 @@ if (isGameOver)
         Console.SetCursorPosition(0, h + 4);
         Console.WriteLine("BOOM!!!");
     }
+
     for (int i = 1; i < h - 1; i++)
     {
         for (int j = 1; j < b - 1; j++)
         {
-            int left = x2left(j);
-            int top = y2top(i);
+            left = x2left(j);
+            top = y2top(i);
             if (mineKort[i, j] == "M" && plade[i, j] == "F")
             {
                 Console.BackgroundColor = ConsoleColor.Green;
                 Console.SetCursorPosition(left, top);
                 Console.Write("*");
-                Console.BackgroundColor = oldBackColor;
             }
             else if (taber && plade[i, j] == "F" && mineKort[i, j] != "M")
             {
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.SetCursorPosition(left, top);
                 Console.Write("F");
-                Console.BackgroundColor = oldBackColor;
             }
             else if (taber && mineKort[i, j] == "M" && plade[i, j] != "F")
             {
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.SetCursorPosition(left, top);
                 Console.Write("*");
-                Console.BackgroundColor = oldBackColor;
+
             }
         }
     }
